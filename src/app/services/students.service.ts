@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -36,7 +37,7 @@ export interface StudentsResponse {
 
 @Injectable({ providedIn: 'root' })
 export class StudentsService {
-  private baseUrl = 'http://localhost:3000/students'; // your Express API
+  private baseUrl = `${environment.apiUrl}/students`;
 
   constructor(private http: HttpClient) {}
 

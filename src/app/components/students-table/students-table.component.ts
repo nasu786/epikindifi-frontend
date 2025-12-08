@@ -38,7 +38,7 @@ export interface Student {
     CommonModule
   ],
 })
-export class StudentsTableComponent implements OnInit, AfterViewInit {
+export class StudentsTableComponent implements OnInit {
   constructor(private studentService: StudentsService) { }
   displayedColumns: string[] = [
     'Id',
@@ -53,7 +53,7 @@ export class StudentsTableComponent implements OnInit, AfterViewInit {
   private loaderEndDelay = 100;
   private searchDebounceTimer: any;
 
-  students = new MatTableDataSource<Student>([]);
+  students: Student[] = [];
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;
@@ -71,33 +71,8 @@ export class StudentsTableComponent implements OnInit, AfterViewInit {
     this.loadStudents()
   }
 
-  ngAfterViewInit(): void {
-    this.students.paginator = this.paginator;
-    this.students.sort = this.sort;
-
-    this.students.filterPredicate = (data: Student, filter: string) => {
-      const text =
-        (data.id +
-          ' ' +
-          data.name +
-          ' ' +
-          data.address +
-          ' ' +
-          data.class +
-          ' ' +
-          data.fatherName +
-          ' ' +
-          data.motherName)
-          .toLowerCase()
-          .trim();
-
-      return text.includes(filter);
-    };
-  }
-
   loadStudents() {
     this.loading = true;
-    this.loadStartTime = Date.now();
 
     this.studentService
       .getStudents({
@@ -109,21 +84,11 @@ export class StudentsTableComponent implements OnInit, AfterViewInit {
       })
       .subscribe({
         next: (res) => {
-          this.students.data = res.data;
+          this.students = res.data;
           this.totalItems = res.pagination.total;
           this.pageSize = res.pagination.limit;
           this.pageIndex = res.pagination.page - 1;
-          const now = Date.now();
-          const elapsed = now - this.loadStartTime;
-
-          if (elapsed < this.loaderMinimumTime) {
-            const remaining = this.loaderMinimumTime - elapsed;
-            setTimeout(() => {
-              setTimeout(() => (this.loading = false), this.loaderEndDelay);
-            }, remaining);
-          } else {
-            this.loading = false;
-          }
+          this.loading = false;
         },
         error: () => {
           this.loading = false;

@@ -16,7 +16,7 @@
 
     <div class="table-wrapper">
 
-      <!-- <ng-container *ngIf="loading; else tableData">
+      <ng-container *ngIf="loading; else tableData">
         <table class="skeleton-table">
           <tr>
             <ngx-skeleton-loader [count]="pageSize" animation="pulse" [theme]="{
@@ -29,7 +29,7 @@
             </ngx-skeleton-loader>
           </tr>
         </table>
-      </ng-container> -->
+      </ng-container>
 
       <table mat-table [dataSource]="students" matSort (matSortChange)="onSortChange($event)">
         <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
@@ -42,17 +42,17 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <!-- <ng-template #tableData> -->
+        <ng-template #tableData>
         <tr mat-row *matRowDef="let row; columns: displayedColumns" class="clickable-row">
         </tr>
-        <!-- </ng-template> -->
+        </ng-template>
       </table>
     </div>
 
     <mat-divider></mat-divider>
 
     <div class="paginator-wrapper">
-      <mat-paginator [length]="totalItems" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+      <mat-paginator [length]="totalItems" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50, 100]"
         (page)="onPageChange($event)" showFirstLastButtons class="dark-paginator">
       </mat-paginator>
     </div>
